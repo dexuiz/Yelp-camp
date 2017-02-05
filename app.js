@@ -9,7 +9,7 @@ seedDB();
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended:true}));
 mongoose.connect("mongodb://localhost/yelp-camp");
-
+app.use(express.static(__dirname +"/public"));
 //schema Setup
 
 
@@ -76,11 +76,13 @@ app.post("/grounds/:id/comments",function(req,res){
       console.log("error took place");
       res.redirect("/grounds");
     }else {
-      Comment.create(req.body.comment,function(err,data){
+      Comment.create(req.body.comment,function(err,comment){
         if (err) {
           console.log("error took place ");
         }else {
-          console.log(data);
+          data.comments.push(comment);
+          data.save();
+          res.redirect("/grounds/"+req.params.id)
         }
       })
     }

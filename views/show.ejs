@@ -1,17 +1,45 @@
 <% include partials/header.ejs %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <p class="lead"></p>
+        <div class="list-group">
+          <li class="list-group-item active">item-1</li>
+          <li class="list-group-item">item-2</li>
+          <li class="list-group-item">item-3</li>
+        </div>
+        <!-- map -->
+    </div>
+    <div class="col-md-9">
+      <div class="thumbnail">
+        <img src="<%=ground.image%>" alt="campground" class="img-responsive">
+        <div class="caption-full">
+          <h4 class="pull-right">$9.00/night</h4>
+          <h2><a><%=ground.name %></a></h2>
+          <h4><%=ground.desc %></h4>
+        </div>
+      </div>
+      <div class="well">
+        <div class="text-right">
+          <a href="/grounds/<%=ground.id%>/comments/new"><button class="btn btn-success"  name="button" >comment here</button></a>
+        </div>
+        <hr>
+        <% ground.comments.forEach(function(comment){ %>
+          <div class="row">
+            <div class="col-md-12">
+              <strong><%= comment.author %> </strong>
+              <span class="pull-right">10 days ago</span>
+              <p>
+                 - <%=comment.text %>
+              </p>
+            </div>
+          </div>
 
+        <% }); %>
 
-
-<h2><%=ground.name %></h2>
-
-<img src="<%=ground.image%>" alt="" class="img-rounded">
-
-<p><%= ground.desc %></p>
-
-<% ground.comments.forEach(function(comment){ %>
-  <p>
-    <strong><%= comment.author %> </strong> - <%=comment.text %>
-  </p>
-<% }) %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <% include partials/footer.ejs %>

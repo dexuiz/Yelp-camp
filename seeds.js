@@ -17,7 +17,7 @@ var data = [
 
 ];
 
-var comment
+
 function seedDB(){
   //remove all campgrounds
   campground.remove({},function(err){
@@ -39,8 +39,8 @@ function seedDB(){
               if (err) {
                 console.log('error took place');
               }else
-                campground.comments.push(comment);
-                campground.save();
+                data.comments.push(comment);
+                data.save();
                 console.log("comment added to the post");
             })
           }

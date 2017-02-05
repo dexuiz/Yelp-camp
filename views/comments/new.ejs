@@ -1,0 +1,23 @@
+<% include ../partials/header %>
+
+<div class="Container">
+  <div class="row">
+    <h2 class="text-center">Add a new comment to <%= ground.name %>s</h2>
+    <form method="POST" action="/grounds/<%= ground.id %>/comments">
+      <div style="width:30%; margin :30px auto;">
+        <div class="form-group">
+          <input class ="form-control" type ="text" name="comment[text]" placeholder="name"></input>
+        </div>
+        <div class="form-group">
+          <input  class ="form-control" type ="text" name="comment[author]" placeholder="image"></input>
+        </div>
+
+        <div class="form-group">
+          <button  type="submit" name="button" class="btn btn-primary btn-lg btn-block">Add</button>
+        </div>
+      </div>
+    </form>
+ </div>
+</div
+
+<% include ../partials/footer %>

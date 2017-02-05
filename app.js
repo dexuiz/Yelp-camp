@@ -3,8 +3,8 @@ var  app = express();
 var bodyParser= require("body-parser");
 var mongoose = require("mongoose");
 var campground =require("./models/campground");
-var seeds = require("./seeds");
-
+var seedDB = require("./seeds");
+var Comment = require("./models/comment")
 seedDB();
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended:true}));
@@ -13,24 +13,12 @@ mongoose.connect("mongodb://localhost/yelp-camp");
 //schema Setup
 
 
-// campground.create({
-//   name:"lakes",
-//   image:"http://www.escapehere.com/wp-content/uploads/2013/07/820x480xBlue-Lake-Australia-820x480.jpg.pagespeed.ic.ewgsVxcoEV.jpg",
-//   desc:"kfojfijijufrin8dui8cjnfdiutuneirhtnurtyytr"
-// },function(err,grounds){
-//   if(err)
-//     console.log("error is here",err);
-//   else {
-//     console.log(grounds);
-//   }
-// });
-
-
 
 app.get("/",function(req,res){
   console.log("yelp camp is on");
   res.render("home");
 });
+
 
 app.get("/grounds",function(req,res){
   campground.find({},function(err,campgrounds){
@@ -54,13 +42,14 @@ app.post("/grounds",function(req,res){
 
     }
  });
-})
+});
 app.get("/grounds/new",function(req,res){
   res.render("new");
-})
+});
 
+//show route
 app.get("/grounds/:id",function(req,res){
-   campground.findById(req.params.id,function(err,foundGround){
+   campground.findById(req.params.id).populate("comments").exec(function(err,foundGround){
     if(err){
       console.log("error occured",err);
     }else {
@@ -68,7 +57,36 @@ app.get("/grounds/:id",function(req,res){
     }
   });
 
+});
+
+
+app.get("/grounds/:id/comments/new",function(req,res){
+  campground.findById(req.params.id,function(err,data){
+    if (err) {
+      console.log("error took place");
+    }else {
+      res.render("comments/new",{ground:data})
+    }
+  });
+});
+
+app.post("/grounds/:id/comments",function(req,res){
+  campground.findById(req.params.id,function(err,data){
+    if (err) {
+      console.log("error took place");
+      res.redirect("/grounds");
+    }else {
+      Comment.create(req.body.comment,function(err,data){
+        if (err) {
+          console.log("error took place ");
+        }else {
+          console.log(data);
+        }
+      })
+    }
+  })
 })
+
 
 app.listen(3000,function(){
   console.log("yelp camp server on 3000");

@@ -1,11 +1,17 @@
 <% include partials/header.ejs %>
 
-<h1>this is the show template </h1>
+
 
 <h2><%=ground.name %></h2>
 
 <img src="<%=ground.image%>" alt="" class="img-rounded">
 
-<h2><%= ground.desc %></h2>
+<p><%= ground.desc %></p>
+
+<% ground.comments.forEach(function(comment){ %>
+  <p>
+    <strong><%= comment.author %> </strong> - <%=comment.text %>
+  </p>
+<% }) %>
 
 <% include partials/footer.ejs %>

@@ -13,6 +13,10 @@ app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended:true}));
 mongoose.connect("mongodb://localhost/yelp-camp");
 app.use(express.static(__dirname +"/public"));
+app.use(function(req,res,next){
+  res.locals.current = req.user;
+  next();
+});
 //
 
 app.use(require("express-session")({
@@ -36,17 +40,18 @@ app.get("/",function(req,res){
 
 
 app.get("/grounds",function(req,res){
+console.log("bc");
+console.log(req.user);
   campground.find({},function(err,campgrounds){
     if(err){
       console.log("error detected");
     }else {
-      res.render("campgrounds",{grounds:campgrounds});
+      res.render("campgrounds",{grounds:campgrounds , current:req.user});
     }
   })
 })
 
 app.post("/grounds",function(req,res){
- console.log(req.body.newDesc);
 
  campground.create({name:req.body.newName , image:req.body.newImage ,desc:req.body.newDesc},function(err,campgrounds){
    if(err)
@@ -68,14 +73,14 @@ app.get("/grounds/:id",function(req,res){
     if(err){
       console.log("error occured",err);
     }else {
-      res.render("show",{ground:foundGround});
+      res.render("show",{ground:foundGround, current:req.user});
     }
   });
 
 });
 
 
-app.get("/grounds/:id/comments/new",function(req,res){
+app.get("/grounds/:id/comments/new",isLoggedIn,function(req,res){
   campground.findById(req.params.id,function(err,data){
     if (err) {
       console.log("error took place");
@@ -84,6 +89,7 @@ app.get("/grounds/:id/comments/new",function(req,res){
     }
   });
 });
+
 
 app.post("/grounds/:id/comments",function(req,res){
   campground.findById(req.params.id,function(err,data){
@@ -135,6 +141,15 @@ app.get("/logout",function(req,res){
   req.logout();
   res.redirect("/grounds");
 })
+
+
+
+function isLoggedIn(req,res,next){
+  if(req.isAuthenticated()){
+    return  next();
+  }
+  res.redirect("/login");
+}
 
 
 app.listen(3000,function(){

@@ -4,7 +4,7 @@ var campground=require("../models/campground")
 
 router.get("/grounds",function(req,res){
 console.log("bc");
-console.log(req.user);
+
   campground.find({},function(err,campgrounds){
     if(err){
       console.log("error detected");
@@ -15,11 +15,16 @@ console.log(req.user);
 })
 
 router.post("/grounds",function(req,res){
-
- campground.create({name:req.body.newName , image:req.body.newImage ,desc:req.body.newDesc},function(err,campgrounds){
+console.log(req.user);
+var author={
+  id:req.user._id,
+  username:req.user.username
+};
+ campground.create({name:req.body.newName , image:req.body.newImage ,desc:req.body.newDesc ,author:author},function(err,ground){
    if(err)
       console.log("error generated",err);
     else {
+      console.log(ground);
       console.log("add done");
       res.redirect("/grounds");
 
@@ -28,7 +33,7 @@ router.post("/grounds",function(req,res){
 });
 
 
-router.get("/grounds/new",function(req,res){
+router.get("/grounds/new",isLoggedIn,function(req,res){
   res.render("new");
 });
 
@@ -43,5 +48,12 @@ router.get("/grounds/:id",function(req,res){
   });
 
 });
+
+function isLoggedIn(req,res,next){
+  if(req.isAuthenticated()){
+    return  next();
+  }
+  res.redirect("/login");
+}
 
 module.exports= router;

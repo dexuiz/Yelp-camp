@@ -25,8 +25,12 @@ router.post("/grounds/:id/comments",function(req,res){
         if (err) {
           console.log("error took place ");
         }else {
+          comment.author.id=req.user._id;
+          comment.username= req.user.username;
+          console.log(req.user.username);
           data.comments.push(comment);
           data.save();
+          console.log(comment);
           res.redirect("/grounds/"+req.params.id)
         }
       })

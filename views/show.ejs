@@ -18,6 +18,10 @@
           <h2><a><%=ground.name %></a></h2>
           <h4><%=ground.desc %></h4>
           <p><em>Created By<%= ground.author.username %></em></p>
+          <a href="/grounds/<%= ground._id %>/edit" class="btn btn-warning ">Edit</a>
+          <form action="/grounds/<%=ground._id%>?_method=DELETE" method="POST" id="btn-delete">
+            <button type="submit" name="button" class="btn btn-danger">Delete</button>
+          </form>
         </div>
       </div>
       <div class="well">

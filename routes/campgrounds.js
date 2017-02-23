@@ -60,7 +60,7 @@ router.get("/grounds/:id/edit",checkOwnership,function(req,res){
 
 
 //update route
-router.put("/grounds/:id",function(req,res){
+router.put("/grounds/:id",checkOwnership,function(req,res){
   console.log(req.body.ground);
   campground.findByIdAndUpdate(req.params.id,req.body.ground,function(err,updGround){
     if (err) {

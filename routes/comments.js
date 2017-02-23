@@ -38,6 +38,40 @@ router.post("/grounds/:id/comments",function(req,res){
   })
 })
 
+
+router.get('/grounds/:id/comments/:cid/edit',function(req,res){
+  Comment.findById(req.params.cid,function(err,foundComment){
+    if(err){
+      console.log("error took place ",err);
+    }else{
+      res.render("comments/edit",{ground_id:req.params.id,comment:foundComment})
+    }
+  });
+});
+
+router.put("/grounds/:id/comments/:cid",function(req,res){
+  Comment.findByIdAndUpdate(req.params.cid,req.body.comment,function(err,upComment){
+    if(err){
+      console.log("erorr took place",err);
+      res.redirect("back");
+    }else {
+      res.redirect("/grounds/"+req.params.id);
+    }
+  })
+});
+
+router.delete("/grounds/:id/comments/:cid",function(req,res){
+  Comment.findByIdAndRemove(req.params.cid,function(err,dGround){
+    if (err) {
+      console.log("error took place");
+      res.redirect("back");
+
+    }else {
+      res.redirect("/grounds/"+req.params.id);
+    }
+  })
+});
+
 function isLoggedIn(req,res,next){
   if(req.isAuthenticated()){
     return  next();

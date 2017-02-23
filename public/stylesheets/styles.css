@@ -4,3 +4,11 @@
 #btn-delete{
   display: inline;
 }
+
+#comdel{
+  display: inline;
+}
+
+#spacebtn{
+  margin-left: 5px;
+}

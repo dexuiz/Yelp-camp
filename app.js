@@ -9,7 +9,7 @@ var passport =require("passport");
 var localStrategy=require("passport-local");
 var User= require("./models/user");
 var methodOverride=require("method-override");
-
+var flash require("connect-flash");
 var commentRoutes =require("./routes/comments");
 var campgroundRoutes = require("./routes/campgrounds");
 var indexRoutes = require("./routes/index");
@@ -24,6 +24,8 @@ app.use(function(req,res,next){
   res.locals.current = req.user;
   next();
 });
+app.use(flash());
+
 //
 
 app.use(require("express-session")({
